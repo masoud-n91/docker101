@@ -1,0 +1,56 @@
+API TEST REQUESTS - Windows Command Prompt
+==========================================
+Server: 78.46.80.139:5501
+API Key: classroom-demo-key-change-me
+
+
+ENDPOINT 1 - GET /api/hello
+-----------------------------
+curl http://78.46.80.139:5501/api/hello -H "X-API-Key: classroom-demo-key-change-me"
+
+curl "http://78.46.80.139:5501/api/hello?name=Alice" -H "X-API-Key: classroom-demo-key-change-me"
+
+
+ENDPOINT 2 - GET /api/stats
+-----------------------------
+curl http://78.46.80.139:5501/api/stats -H "X-API-Key: classroom-demo-key-change-me"
+
+
+ENDPOINT 3 - POST /api/echo
+-----------------------------
+curl -X POST http://78.46.80.139:5501/api/echo -H "X-API-Key: classroom-demo-key-change-me" -H "Content-Type: application/json" -d "{\"message\": \"hello world\"}"
+
+
+ENDPOINT 4 - POST /api/users (create a user)
+----------------------------------------------
+curl -X POST http://78.46.80.139:5501/api/users -H "X-API-Key: classroom-demo-key-change-me" -H "Content-Type: application/json" -d "{\"name\": \"John\", \"surname\": \"Doe\", \"password\": \"secret123\"}"
+
+
+ENDPOINT 5 - GET /api/users (search users)
+--------------------------------------------
+# Search by ID:
+curl "http://78.46.80.139:5501/api/users?id=1" -H "X-API-Key: classroom-demo-key-change-me"
+
+# Search by name:
+curl "http://78.46.80.139:5501/api/users?name=John" -H "X-API-Key: classroom-demo-key-change-me"
+
+# Search by surname:
+curl "http://78.46.80.139:5501/api/users?surname=Doe" -H "X-API-Key: classroom-demo-key-change-me"
+
+# Search by name and surname combined:
+curl "http://78.46.80.139:5501/api/users?name=John&surname=Doe" -H "X-API-Key: classroom-demo-key-change-me"
+
+
+ERROR CASES
+-----------------------------------
+# Missing API key - should return 401:
+curl http://78.46.80.139:5501/api/hello
+
+# Wrong API key - should return 401:
+curl http://78.46.80.139:5501/api/hello -H "X-API-Key: wrong-key"
+
+# Missing required field - should return 400:
+curl -X POST http://78.46.80.139:5501/api/users -H "X-API-Key: classroom-demo-key-change-me" -H "Content-Type: application/json" -d "{\"name\": \"John\"}"
+
+# No search param - should return 400:
+curl http://78.46.80.139:5501/api/users -H "X-API-Key: classroom-demo-key-change-me"

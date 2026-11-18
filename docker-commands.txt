@@ -1,0 +1,55 @@
+# PROCESS STATUS
+sudo docker ps
+sudo docker compose ps
+
+# CONTAINERS
+sudo docker compose up --build -d
+sudo docker compose up --build -d <service_name>
+sudo docker compose down
+sudo docker compose down --rmi all --volumes --remove-orphans
+
+
+# SIZE
+sudo docker system df
+sudo docker system df -v
+sudo docker images
+sudo docker ps -as
+
+# EXECUTION
+sudo docker exec -it <container_name> bash
+sudo docker exec -it <container_name> sh
+
+# STAT
+sudo docker stats
+
+# LOGS
+sudo docker logs <container_name>
+sudo docker logs -f <container_name>
+sudo docker logs --tail 100 <container_name>
+sudo docker logs -t <container_name>
+sudo docker logs --since 1h <container_name>
+
+# CLEANING
+sudo docker rm <container_name>
+sudo docker rm -f <container_name>
+sudo docker system prune -af --volumes
+sudo docker system prune -af
+
+|---------------------------------------------------------------------------|
+| Docker resource     | Deleted?  | Condition                               |
+|---------------------|-----------|-----------------------------------------|
+| Stopped containers  | Yes       | All stopped containers                  |
+|---------------------|-----------|-----------------------------------------|
+| Running containers  | No        | Never removed                           |
+|---------------------|-----------|-----------------------------------------|
+| Unused networks     | Yes       | Not connected to containers             |
+|---------------------|-----------|-----------------------------------------|
+| Unused images       | Yes       | Images not used by existing containers  |
+|---------------------|-----------|-----------------------------------------|
+| Dangling images     | Yes       | Included in unused images               |
+|---------------------|-----------|-----------------------------------------|
+| Build cache         | Yes       | Unused build cache                      |
+|---------------------|-----------|-----------------------------------------|
+| Volumes	          | No        | Not included by default                 |
+|---------------------------------------------------------------------------|
+

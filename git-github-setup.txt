@@ -1,0 +1,85 @@
+GIT + GITHUB SETUP — FROM EMPTY FOLDER TO REMOTE REPO
+=======================================================
+
+PREREQUISITES
+-------------
+- Git installed: https://git-scm.com
+- GitHub CLI installed: https://cli.github.com
+- A GitHub account
+
+
+STEP 1 — Open a terminal in your project folder
+------------------------------------------------
+Make sure you are inside your project folder before running any command.
+
+
+STEP 2 — Log in to GitHub CLI (only needed once)
+-------------------------------------------------
+gh auth login
+
+Follow the prompts:
+  - Choose: GitHub.com
+  - Choose: HTTPS
+  - Authenticate via browser
+
+
+STEP 3 — Initialize a local Git repository
+-------------------------------------------
+git init
+
+This creates a hidden .git folder that tracks your project history.
+
+
+STEP 4 — Create a .gitignore file
+----------------------------------
+Create a file named .gitignore in your project folder and add files
+you do NOT want to push to GitHub. For a Python/Docker project:
+
+  .env
+  __pycache__/
+  *.pyc
+  *.sqlite3
+
+This is important — never push your .env file (it contains secrets).
+
+
+STEP 5 — Stage all your files
+------------------------------
+git add .
+
+This tells Git which files to include in the first commit.
+
+
+STEP 6 — Create the first commit
+----------------------------------
+git commit -m "first commit"
+
+A commit is a snapshot of your project at this point in time.
+
+
+STEP 7 — Create the GitHub repository and push
+------------------------------------------------
+gh repo create my-project-name --public --source=. --remote=origin --push
+
+Replace "my-project-name" with your desired repo name.
+
+Flags explained:
+  --public         makes the repo public (use --private for private)
+  --source=.       uses the current folder as the source
+  --remote=origin  names the GitHub connection "origin"
+  --push           pushes your commit to GitHub immediately
+
+
+STEP 8 — Verify
+----------------
+Open your GitHub profile in a browser — your repo should be there
+with all your files.
+
+
+DAILY WORKFLOW AFTER SETUP
+---------------------------
+After the initial setup, pushing new changes is always:
+
+  git add .
+  git commit -m "describe what you changed"
+  git push

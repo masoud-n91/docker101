@@ -1,0 +1,53 @@
+services:          # define the containers that make up the app
+  api:             # name of this service
+    build:                     # build the image from local source code
+      context: .               # use the current directory as the build root
+      dockerfile: Dockerfile   # the file with build instructions
+    image: docker-flask-class:1.0      # tag the built image with this name and version
+    container_name: docker-class-api   # give the container a fixed, readable name
+
+    env_file:
+      - .env          # load secret values (e.g. API_KEY) from a .env file
+    environment:
+      DATA_DIR: /data                  # tell the app where to store the database
+      APP_PORT: ${APP_PORT:-5000}      # port the app listens on (default 5000)
+
+    ports:
+      - "${HOST_PORT:-5501}:${APP_PORT:-5000}"  # HOST:CONTAINER — accessible from outside the server
+
+    volumes:
+      - api_data:/data   # persist the SQLite database across container restarts
+
+    depends_on:
+      flask-mysql:
+        condition: service_healthy   # wait until MySQL passes its healthcheck, not just starts
+
+    restart: unless-stopped   # auto-restart if the container crashes, but not if manually stopped
+    # restart options:
+    #   no             — never restart (default)
+    #   always         — always restart, even after manual stop
+    #   unless-stopped — restart on crash, but not if you manually stopped it
+    #   on-failure     — only restart if the container exits with an error code
+
+  flask-mysql:                     # MySQL database service
+    image: mysql:8                 # official MySQL image, version 8
+    container_name: docker-class-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}   # root password (set in .env)
+      MYSQL_DATABASE: ${MYSQL_DATABASE}             # database name to create on startup
+      MYSQL_USER: ${MYSQL_USER}                     # app user
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}             # app user password
+    ports:
+      - "5502:3306"                # map host port 5502 to MySQL's default port 3306
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 5s    # check every 5 seconds
+      timeout: 5s     # fail if no response within 5 seconds
+      retries: 10     # give up after 10 failed attempts
+    volumes:
+      - db_data:/var/lib/mysql     # persist database files across container restarts
+    restart: unless-stopped
+
+volumes:
+  api_data:   # named volume managed by Docker to store /data
+  db_data:    # named volume managed by Docker to store MySQL data
