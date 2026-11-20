@@ -6,6 +6,7 @@ PREREQUISITES
 - Git installed: https://git-scm.com
 - GitHub CLI installed: https://cli.github.com
 - A GitHub account
+- Run this once after installation: git config --global init.defaultBranch main
 
 
 STEP 1 — Open a terminal in your project folder
